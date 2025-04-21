@@ -5,15 +5,17 @@ Answer = input("What is the defintion? ")
 
 import json
 
-class Flashcard:
-    def __init__(self,words,definition):
-        self.words = words
-        self.definition = definition
-    def to_dict(self):
-        return {"make": self.words, "model": self.definition}
+FLASHCARDS_FILE = 'FlashCards.json'
 
-
-    with open("FlashCards.json", "w") as file:
-        json.dump(flashcards_data, file, indent=4)
+def load_flashcards():
+    try:
+        with open(FLASHCARDS_FILE, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+    
+def save_flashcards(flashcards):
+    with open(FLASHCARDS_FILE, 'w') as file:
+        json.dump(flashcards, file, indent=4)
 
 
