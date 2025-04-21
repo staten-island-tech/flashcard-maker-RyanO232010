@@ -1,5 +1,5 @@
 import json
-import random
+
 
 class FlashCardApp:
     def __init__(self, file_name='FlashCards.json'):
@@ -11,9 +11,16 @@ class FlashCardApp:
     def load_flashcards(self):
         try:
             with open(self.file_name, 'r') as file:
-                return json.load(file)
+                content = file.read().strip()
+                if not content:
+                    return {}  # File is empty, start with no flashcards
+                return json.loads(content)
         except FileNotFoundError:
+            return {}  # File doesn’t exist yet, no problem!
+        except json.JSONDecodeError:
+            print("Oops! The flashcards file is broken. Starting with an empty set.")
             return {}
+
 
     # Function to save flashcards to the file
     def save_flashcards(self):
@@ -44,7 +51,6 @@ class FlashCardApp:
         total_questions = len(self.flashcards)
 
         questions = list(self.flashcards.keys())
-        random.shuffle(questions)
 
         for word in questions:
             answer = input(f"What is the answer to '{word}': ")
